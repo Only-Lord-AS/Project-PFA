@@ -1,0 +1,184 @@
+{
+    "info": {
+        "_postman_id": "c1f7a2d8-b5c9-4b6a-9a9f-3e8d2e8b1d9c",
+        "name": "E-Commerce Sécurisé - Auth",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Inscription (Register)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"client@example.com\",\n    \"nom_complet\": \"Jean Dupont\",\n    \"password\": \"Password123\",\n    \"role\": \"ENTREPRISE\",\n    \"telephone\": \"0123456789\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/auth/register/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "auth",
+                        "register",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "2. Connexion (Login)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set(\"jwt_access\", jsonData.access);",
+                            "pm.environment.set(\"jwt_refresh\", jsonData.refresh);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"client@example.com\",\n    \"password\": \"Password123\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/auth/login/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "auth",
+                        "login",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "3. Rafraîchir Token (Refresh)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set(\"jwt_access\", jsonData.access);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"refresh\": \"{{jwt_refresh}}\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/auth/refresh/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "auth",
+                        "refresh",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "4. Profil Utilisateur (Me)",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_access}}"
+                    }
+                ],
+                "url": {
+                    "raw": "http://localhost:8000/api/auth/me/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "auth",
+                        "me",
+                        ""
+                    ]
+                }
+            }
+        },
+        {
+            "name": "5. Déconnexion (Logout)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_access}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"refresh\": \"{{jwt_refresh}}\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8000/api/auth/logout/",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "api",
+                        "auth",
+                        "logout",
+                        ""
+                    ]
+                }
+            }
+        }
+    ]
+}
